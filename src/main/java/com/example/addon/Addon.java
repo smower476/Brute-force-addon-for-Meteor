@@ -17,6 +17,7 @@ public class Addon extends MeteorAddon {
     public static final Category CATEGORY = new Category("Brute-force");
     public static final HudGroup HUD_GROUP = new HudGroup("Brute-force");
 
+
     @Override
     public void onInitialize() {
         LOG.info("Initializing Meteor Addon Template");
