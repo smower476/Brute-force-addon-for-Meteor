@@ -1,5 +1,5 @@
 package com.example.addon.modules;
-
+import java.util.Arrays;
 import com.example.addon.Addon;
 import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.meteorclient.utils.player.ChatUtils;
@@ -8,6 +8,7 @@ import meteordevelopment.meteorclient.settings.*;
 
 
 import java.util.List;
+
 public class Bruteforce extends Module {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
 
@@ -74,6 +75,37 @@ public class Bruteforce extends Module {
     @Override
     public void onActivate() {
         //ChatUtils.sendPlayerMsg("I am a very bad person!");
-        for (int i=0; i<20; i++){ChatUtils.sendPlayerMsg("a"+i+"b");}
+        //for (int i=0; i<20; i++){ChatUtils.sendPlayerMsg("a"+i+"b");}
+        String line = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789!№@#";
+        char[] chars;
+        chars = new char[line.length()];
+        for(int i=0; i<line.length();i++){
+            chars[i] = line.charAt(i);
+            //System.out.println(chars);
+        }
+
+        //char[] chars = {'a', 'b', 'c', 'd'};
+        int maxLength = 3;
+
+        printCombinations(chars, maxLength);
+    }
+    public static void printCombinations(char[] chars, int maxLength) {
+        for (int length = 1; length <= maxLength; length++) {
+            char[] combination = new char[length];
+            generateCombinations(chars, combination, 0, length);
+        }
+    }
+
+    public static void generateCombinations(char[] chars, char[] combination, int start, int length) {
+        if (length == 0) {
+            String str = new String(combination);
+            ChatUtils.sendPlayerMsg(str);
+            return;
+        }
+
+        for (int i = 0; i < chars.length; i++) {
+            combination[combination.length - length] = chars[i];
+            generateCombinations(chars, combination, i, length - 1);
+        }
     }
 }
