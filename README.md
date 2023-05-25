@@ -1,8 +1,5 @@
-# Meteor Addon Template
-
-A template to allow easy usage of the Meteor Addon API.
+# Brute-force addon for Meteor client 
+Minecraft v1.19.3
+Java 17+
 
 ### How to use:  
-- Clone this project
-- Use this template to create new modules/commands
-- Run the mod with Meteor.
