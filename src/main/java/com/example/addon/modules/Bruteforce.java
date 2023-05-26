@@ -110,9 +110,9 @@ public class Bruteforce extends Module {
             if (length == 0) {
                 String str = new String(combination);
                 try {
-                    ChatUtils.sendPlayerMsg(str);
                     Thread.sleep(timer*50);
                     System.out.println("waiting " + timer*50 + " ms (" + timer + " ticks)");
+                    ChatUtils.sendPlayerMsg(str);
                 } catch(InterruptedException ex)
                 {
                     ex.printStackTrace();

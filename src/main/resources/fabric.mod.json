@@ -2,13 +2,13 @@
   "schemaVersion": 1,
   "id": "addon-template",
   "version": "${version}",
-  "name": "Addon Template",
+  "name": "Brute-force",
   "description": "An addon template for the Meteor addons.",
   "authors": [
-    "seasnail"
+    "Chicken"
   ],
   "contact": {
-    "repo": "https://github.com/MeteorDevelopment/meteor-addon-template"
+    "repo": "https://github.com/smower476/Brute-force-addon-for-Meteor"
   },
   "icon": "assets/template/icon.png",
   "environment": "client",
