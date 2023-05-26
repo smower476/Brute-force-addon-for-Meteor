@@ -3,9 +3,11 @@ import java.util.Arrays;
 import com.example.addon.Addon;
 import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.meteorclient.utils.player.ChatUtils;
-import java.util.Date;
 import meteordevelopment.meteorclient.settings.*;
-
+import meteordevelopment.meteorclient.events.game.GameLeftEvent;
+import meteordevelopment.meteorclient.events.game.OpenScreenEvent;
+import meteordevelopment.meteorclient.events.world.TickEvent;
+import meteordevelopment.orbit.EventHandler;
 
 import java.util.List;
 
@@ -90,6 +92,12 @@ public class Bruteforce extends Module {
 
         printCombinations(chars, maxLength);
     }
+
+    @EventHandler
+    private void onGameLeft(GameLeftEvent event) {
+        toggle();
+    }
+
     public static void printCombinations(char[] chars, int maxLength) {
         for (int length = 1; length <= maxLength; length++) {
             char[] combination = new char[length];
@@ -98,26 +106,27 @@ public class Bruteforce extends Module {
     }
 
     public static void generateCombinations(char[] chars, char[] combination, int start, int length) {
-        if (length == 0) {
-            String str = new String(combination);
-            ChatUtils.sendPlayerMsg(str);
-            return;
-        }
 
-        for (int i = 0; i < chars.length; i++) {
+            if (length == 0) {
+                String str = new String(combination);
+                try {
+                    ChatUtils.sendPlayerMsg(str);
+                    Thread.sleep(timer*50);
+                    System.out.println("waiting " + timer*50 + " ms (" + timer + " ticks)");
+                } catch(InterruptedException ex)
+                {
+                    ex.printStackTrace();
+                }
+                return;
+            }
 
-            try
-            {
+            for (int i = 0; i < chars.length; i++) {
                 combination[combination.length - length] = chars[i];
                 generateCombinations(chars, combination, i, length - 1);
-                Thread.sleep(timer*50);
-                System.out.println("waiting " + timer*50 + " ms (" + timer + " ticks)");
-            }
-            catch(InterruptedException ex)
-            {
-                ex.printStackTrace();
             }
 
-        }
+
+
+
     }
 }
