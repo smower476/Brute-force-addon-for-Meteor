@@ -3,7 +3,7 @@ import java.util.Arrays;
 import com.example.addon.Addon;
 import meteordevelopment.meteorclient.systems.modules.Module;
 import meteordevelopment.meteorclient.utils.player.ChatUtils;
-
+import java.util.Date;
 import meteordevelopment.meteorclient.settings.*;
 
 
@@ -66,7 +66,7 @@ public class Bruteforce extends Module {
         .build()
     );
 
-    private int messageI, timer;
+    static int timer;
 
     public Bruteforce() {
         super(Addon.CATEGORY, "Brute-force", "Brute-force.");
@@ -74,6 +74,7 @@ public class Bruteforce extends Module {
 
     @Override
     public void onActivate() {
+        timer = delay.get();
         //ChatUtils.sendPlayerMsg("I am a very bad person!");
         //for (int i=0; i<20; i++){ChatUtils.sendPlayerMsg("a"+i+"b");}
         String line = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM0123456789!№@#";
@@ -85,7 +86,7 @@ public class Bruteforce extends Module {
         }
 
         //char[] chars = {'a', 'b', 'c', 'd'};
-        int maxLength = 3;
+        int maxLength = 2;
 
         printCombinations(chars, maxLength);
     }
@@ -104,8 +105,19 @@ public class Bruteforce extends Module {
         }
 
         for (int i = 0; i < chars.length; i++) {
-            combination[combination.length - length] = chars[i];
-            generateCombinations(chars, combination, i, length - 1);
+
+            try
+            {
+                combination[combination.length - length] = chars[i];
+                generateCombinations(chars, combination, i, length - 1);
+                Thread.sleep(timer*50);
+                System.out.println("waiting " + timer*50 + " ms (" + timer + " ticks)");
+            }
+            catch(InterruptedException ex)
+            {
+                ex.printStackTrace();
+            }
+
         }
     }
 }
