@@ -12,26 +12,43 @@ import meteordevelopment.orbit.EventHandler;
 import net.minecraft.network.packet.s2c.play.DisconnectS2CPacket;
 import net.minecraft.text.Text;
 
-import java.util.List;
-
 public class dupe extends Module {
     private final SettingGroup sgGeneral = settings.getDefaultGroup();
-    private final Setting<Integer> delay = sgGeneral.add(new IntSetting.Builder()
-        .name("delay")
-        .description("The delay before disconnect. 20 Ticks = 1 sec.")
+    private final Setting<Integer> TickDelay = sgGeneral.add(new IntSetting.Builder()
+        .name("Delay.")
+        .description("Delay before disconnect. 20 Ticks = 1 sec.")
         .defaultValue(300)
         .min(0)
         .sliderMax(1200)
         .build()
     );
+    private final Setting<Integer> MsDelay = sgGeneral.add(new IntSetting.Builder()
+        .name("Advanced delay.")
+        .description("Delay after ticks. (ms)")
+        .defaultValue(0)
+        .min(0)
+        .sliderMax(50)
+        .build()
+    );
 
-
+    private final Setting<Boolean> spam = sgGeneral.add(new BoolSetting.Builder()
+        .name("Spam.")
+        .description("Spam message instead of disconnecting.")
+        .defaultValue(false)
+        .build()
+    );
+    private final Setting<String> message = sgGeneral.add(new StringSetting.Builder()
+        .name("Message.")
+        .description("Message to use for spam.")
+        .defaultValue("/ping")
+        .build()
+    );
 
     public dupe() {
-        super(Addon.CATEGORY, "dupe", "dupe.");
+        super(Addon.CATEGORY, "Dupe", "Combat dupe.");
     }
 
-    static int TickCounter; boolean a;
+    static int TickCounter; boolean flag;
 
     @Override
     public void onActivate() {
@@ -40,26 +57,51 @@ public class dupe extends Module {
     }
     @EventHandler
     private void onTick(TickEvent.Post event) {
-        if (a == true) {TickCounter += 1;};
-        if (TickCounter % 20 == 0 && TickCounter % 20 != 0){ info(String.valueOf(TickCounter) + "ticks have passed");}
-        //if (TickCounter % 20 ==0){ChatUtils.sendPlayerMsg("Tick!"); ChatUtils.sendPlayerMsg(String.valueOf(a));}
-        //if (a == true && TickCounter % 20 == 0){ChatUtils.sendPlayerMsg(String.valueOf(TickCounter)); ChatUtils.sendPlayerMsg(String.valueOf(delay));}
-        //meteor client
-        //mc.player.networkHandler.onDisconnect(new DisconnectS2CPacket(Text.literal("[AutoLog] A non-trusted player appeared in your render distance.")));
-        if (a == true && TickCounter  == delay.get()){ChatUtils.sendPlayerMsg(String.valueOf(TickCounter)); mc.player.networkHandler.onDisconnect(new DisconnectS2CPacket(Text.literal("dupe."))); a = false;}
-        if (TickCounter  >= delay.get()){ChatUtils.sendPlayerMsg(String.valueOf(TickCounter)); mc.player.networkHandler.onDisconnect(new DisconnectS2CPacket(Text.literal("ERROR!"))); a = false;}
+        if (flag) {TickCounter += 1;}
+
+        if (TickCounter % 20 == 0 && TickCounter % 20 != 0){ info(TickCounter + "ticks have passed");}
+
+        if (flag && TickCounter  == TickDelay.get() && !spam.get()){
+            flag = false;
+            try{
+                Thread.sleep(MsDelay.get());
+                mc.player.networkHandler.onDisconnect(new DisconnectS2CPacket(Text.literal("dupe.")));
+            } catch(InterruptedException ex)
+            {
+                ex.printStackTrace();
+            }
+            return;
+
+
+
+        }
+        else if (flag && TickCounter  == TickDelay.get() && spam.get())
+        {
+            try{
+                Thread.sleep(MsDelay.get());
+            for (int i = 0; i < 25; i++) {
+                ChatUtils.sendPlayerMsg(String.valueOf(message.get()));
+            }
+            flag = false;
+            } catch(InterruptedException ex)
+            {
+                ex.printStackTrace();
+            }
+            toggle();
+        }
+        if (TickCounter   >= TickDelay.get() + 60){
+            flag = false;
+            mc.player.networkHandler.onDisconnect(new DisconnectS2CPacket(Text.literal("ERROR!")));
+        }
     }
     @EventHandler
     private void onDamage(DamageEvent event) {
-        //if (event.entity.getUuid() == null) return;
-        //if (!event.entity.getUuid().equals(mc.player.getUuid())) return;
-
-        a = true;
+        flag = true;
     }
 
     @EventHandler
     private void onGameLeft(GameLeftEvent event) {
-        a = false;
+        flag = false;
         toggle();
     }
 }

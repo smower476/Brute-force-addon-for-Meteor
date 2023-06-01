@@ -2,8 +2,8 @@
   "schemaVersion": 1,
   "id": "addon-template",
   "version": "${version}",
-  "name": "Brute-force",
-  "description": "An addon template for the Meteor addons.",
+  "name": "Chicken-extension",
+  "description": "Tools for griefing.",
   "authors": [
     "Chicken"
   ],

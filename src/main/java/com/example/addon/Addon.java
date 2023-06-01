@@ -16,16 +16,16 @@ import org.slf4j.Logger;
 
 public class Addon extends MeteorAddon {
     public static final Logger LOG = LogUtils.getLogger();
-    public static final Category CATEGORY = new Category("Brute-force");
+    public static final Category CATEGORY = new Category("Chicken-extension");
 
-    public static final HudGroup HUD_GROUP = new HudGroup("Brute-force");
+    public static final HudGroup HUD_GROUP = new HudGroup("Chicken-extension");
 
 
 
 
     @Override
     public void onInitialize() {
-        LOG.info("Initializing Meteor Addon Template");
+        LOG.info("Initializing Meteor Addon Chicken-extension");
 
         // Modules
         Modules.get().add(new Bruteforce());
